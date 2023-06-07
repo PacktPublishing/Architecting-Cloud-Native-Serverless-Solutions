@@ -22,41 +22,6 @@ If you feel this book is for you, get your [copy](https://www.amazon.com/Archite
 
 <a href="https://www.packtpub.com/?utm_source=github&utm_medium=banner&utm_campaign=GitHubBanner"><img src="https://raw.githubusercontent.com/PacktPublishing/GitHub/master/GitHub.png" alt="https://www.packtpub.com/" border="5" /></a>
 
-## Instructions and Navigations
-All of the code is organized into folders. For example, Chapter10.
-
-The code will look like the following:
-```
-[cloudshell-user@ip-10-4-174-161 firstLambda]$ touch lambda_function.py
-[cloudshell-user@ip-10-4-174-161 firstLambda]$ cat lambda_function.py
-import json
-
-def lambda_handler(event, context):
-   sum = event['first'] + event['second']
-   return json.dumps({"sum": sum})
-   
-[cloudshell-user@ip-10-4-174-161 firstLambda]$ zip first_lambda.zip lambda_function.py
-```
-
-**Following is what you need for this book:**
-This book is for DevOps, platform, cloud, site reliability engineers, or application developers looking to build serverless solutions. It’s a valuable reference for solution architects trying to modernize a legacy application or working on a greenfield project. It’s also helpful for anyone trying to solve business or operational problems without wanting to manage complicated technology infrastructure using serverless technologies. A basic understanding of cloud computing and some familiarity with at least one cloud vendor, Python programming language, and working with CLI will be helpful when reading this book.
-
-With the following software and hardware list you can run all code files present in the book (Chapter 1-11).
-
-### Software and Hardware List
-
-| Chapter  | Software required                                                | OS required                        |
-| -------- | -----------------------------------------------------------------| -----------------------------------|
-| 1-11     | AWS, GCP, Azure, Cloudflare                                      | Windows, Mac OS X, and Linux (Any) |
-
-
-We also provide a PDF file that has color images of the screenshots/diagrams used in this book. [Click here to download it](https://packt.link/2fHDU).
-
-### Related products <Other books you may enjoy>
-* Go for DevOps [[Packt]](https://www.packtpub.com/product/go-for-devops/9781801818896) [[Amazon]](https://www.amazon.com/Go-DevOps-language-Kubernetes-Terraform/dp/1801818894)
-
-* Azure Containers Explained [[Packt]](https://www.packtpub.com/product/azure-containers-explained/9781803231051) [[Amazon]](https://www.amazon.in/Azure-Containers-Explained-technologies-application-ebook/dp/B0BJ7HTF9Z)
-
 ## Get to Know the Author
-**Safeer CM**
-He is a technology generalist with more than 16 years of experience in site reliability engineering, DevOps, infrastructure, and platform engineering. A site reliability engineer by trade, Safeer has managed large-scale production infrastructures at internet giants like Yahoo and LinkedIn and is currently working at Flipkart. He has experience in cloud management and consulting for budding and established startups as a cloud architect. He is an ambassador of the Continuous Delivery Foundation and contributes to the CD and DevOps communities. As a technology speaker, blogger and meetup organizer, Safeer enjoys mentoring new technology talents, especially in the fields of SRE and DevOps.
+** Safeer CM **
+    He is a technology generalist with more than 16 years of experience in site reliability engineering, DevOps, infrastructure, and platform engineering. A site reliability engineer by trade, Safeer has managed large-scale production infrastructures at internet giants like Yahoo and LinkedIn and is currently working at Flipkart. He has experience in cloud management and consulting for budding and established startups as a cloud architect. He is an ambassador of the Continuous Delivery Foundation and contributes to the CD and DevOps communities. As a technology speaker, blogger and meetup organizer, Safeer enjoys mentoring new technology talents, especially in the fields of SRE and DevOps.
