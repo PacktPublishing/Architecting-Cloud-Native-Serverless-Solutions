@@ -1,0 +1,1 @@
+A GeoIP middleman API for the Maxminds GeoLite2 API using Cloudflare workers.  For more details and instructions, please refer to : https://github.com/PacktPublishing/Architecting-Cloud-Native-Serverless-Solutions/tree/main/chapter-7

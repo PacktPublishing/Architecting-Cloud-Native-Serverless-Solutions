@@ -1,0 +1,148 @@
+{
+    "InResponseOncall": [
+        {
+            "PutRequest": {
+                "Item": {
+                    "oncall": {
+                        "S": "cmsftb81@gmail.com"
+                    }, 
+                    "TeamId": {
+                        "S": "devops"
+                    }, 
+                    "Day": {
+                        "S": "10/12/2021"
+                    }, 
+                    "escalation": {
+                        "S": "cmsftb82@gmail.com"
+                    }
+                }
+            }
+        }, 
+        {
+            "PutRequest": {
+                "Item": {
+                    "oncall": {
+                        "S": "cmsftb81@gmail.com"
+                    }, 
+                    "TeamId": {
+                        "S": "devops"
+                    }, 
+                    "Day": {
+                        "S": "11/12/2021"
+                    }, 
+                    "escalation": {
+                        "S": "cmsftb82@gmail.com"
+                    }
+                }
+            }
+        }, 
+        {
+            "PutRequest": {
+                "Item": {
+                    "oncall": {
+                        "S": "cmsftb81@gmail.com"
+                    }, 
+                    "TeamId": {
+                        "S": "devops"
+                    }, 
+                    "Day": {
+                        "S": "12/12/2021"
+                    }, 
+                    "escalation": {
+                        "S": "cmsftb82@gmail.com"
+                    }
+                }
+            }
+        }, 
+        {
+            "PutRequest": {
+                "Item": {
+                    "oncall": {
+                        "S": "cmsftb81@gmail.com"
+                    }, 
+                    "TeamId": {
+                        "S": "devops"
+                    }, 
+                    "Day": {
+                        "S": "13/12/2021"
+                    }, 
+                    "escalation": {
+                        "S": "cmsftb82@gmail.com"
+                    }
+                }
+            }
+        }, 
+        {
+            "PutRequest": {
+                "Item": {
+                    "oncall": {
+                        "S": "cmsftb81@gmail.com"
+                    }, 
+                    "TeamId": {
+                        "S": "devops"
+                    }, 
+                    "Day": {
+                        "S": "14/12/2021"
+                    }, 
+                    "escalation": {
+                        "S": "cmsftb82@gmail.com"
+                    }
+                }
+            }
+        }, 
+        {
+            "PutRequest": {
+                "Item": {
+                    "oncall": {
+                        "S": "cmsftb81@gmail.com"
+                    }, 
+                    "TeamId": {
+                        "S": "devops"
+                    }, 
+                    "Day": {
+                        "S": "15/12/2021"
+                    }, 
+                    "escalation": {
+                        "S": "cmsftb82@gmail.com"
+                    }
+                }
+            }
+        }, 
+        {
+            "PutRequest": {
+                "Item": {
+                    "oncall": {
+                        "S": "cmsftb81@gmail.com"
+                    }, 
+                    "TeamId": {
+                        "S": "devops"
+                    }, 
+                    "Day": {
+                        "S": "16/12/2021"
+                    }, 
+                    "escalation": {
+                        "S": "cmsftb82@gmail.com"
+                    }
+                }
+            }
+        }, 
+        {
+            "PutRequest": {
+                "Item": {
+                    "oncall": {
+                        "S": "cmsftb81@gmail.com"
+                    }, 
+                    "TeamId": {
+                        "S": "devops"
+                    }, 
+                    "Day": {
+                        "S": "17/12/2021"
+                    }, 
+                    "escalation": {
+                        "S": "cmsftb82@gmail.com"
+                    }
+                }
+            }
+        }
+    ]
+}

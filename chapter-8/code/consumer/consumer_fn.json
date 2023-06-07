@@ -1,0 +1,10 @@
+{
+"MQTT_TOPIC":"iot-2/type/+/id/+/evt/+/fmt/json",
+"API_KEY":"a-35v16x-7uzrpguf6l",
+"AUTH_TOKEN":"bfH-0C4J78QYBAzal0",
+"DEVICE_ID":"a:35v16x:subs1",
+"CLOUDANT_URL":"https://apikey-v2-2t08ptpfdknmvbmcbiufnf0wqfza14nv966sjhdzgi3x:7d6d1be1a82dbc1d3b6041b7320d04da@028e1de1-868b-4527-a4ee-2817fdd36a15-bluemix.cloudantnosqldb.appdomain.cloud",
+"CLOUDANT_APIKEY":"IoibDsa3U6ziBQer02v0b0pSA7_waaGrS8TzENxWBY25",
+"MQTT_HOST":"35v16x.messaging.internetofthings.ibmcloud.com",
+"MQTT_PORT":8883
+}

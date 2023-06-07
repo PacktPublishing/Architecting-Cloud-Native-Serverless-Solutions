@@ -1,0 +1,377 @@
+# InResponse CloudFromation Template
+# This Template will provision all resources 
+# that are needed to implement a serverless alerting services
+AWSTemplateFormatVersion: 2010-09-09
+Description: InResponse Resource Provisioning
+Parameters:
+  SenderEmail:
+    Type: String
+    Default: "alerts@inresponse.com"
+Resources:
+## DynamoDB Tables
+  ConfigTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: InResponseConfig
+      AttributeDefinitions:
+        - AttributeName: ConfigKey
+          AttributeType: S
+      KeySchema:
+        - AttributeName: ConfigKey
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 10
+        WriteCapacityUnits: 10
+  ServiceTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: InResponseService
+      AttributeDefinitions:
+        - AttributeName: ServiceId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: ServiceId
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 10
+        WriteCapacityUnits: 10
+  OncallTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: InResponseOncall
+      AttributeDefinitions:
+        - AttributeName: TeamId
+          AttributeType: S
+        - AttributeName: Day
+          AttributeType: S
+      KeySchema:
+        - AttributeName: TeamId
+          KeyType: HASH
+        - AttributeName: Day
+          KeyType: RANGE
+      ProvisionedThroughput:
+        ReadCapacityUnits: 10
+        WriteCapacityUnits: 10
+  IncidentTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: InResponseIncident
+      AttributeDefinitions:
+        - AttributeName: IncidentId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: IncidentId
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 10
+        WriteCapacityUnits: 10
+# Lambda and Associate IAM Role/Policies
+  InResponseLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: InResponseLambdaRole
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: "/"
+      Policies:
+# Lambda Execution Policy
+# Allows cloudwatch log group and stream creation 
+      - PolicyName: AWSLambdaBasicExecutionRole
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+            Resource: "*"
+# Read/Write Access to all DynamoDB Tables created above
+      - PolicyName: InResponseDynamoDB
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action: 
+              - dynamodb:ListContributorInsights
+              - dynamodb:DescribeReservedCapacityOfferings
+              - dynamodb:ListGlobalTables
+              - dynamodb:ListTables
+              - dynamodb:DescribeReservedCapacity
+              - dynamodb:ListBackups
+              - dynamodb:PurchaseReservedCapacityOfferings
+              - dynamodb:DescribeLimits
+              - dynamodb:ListExports
+              - dynamodb:ListStreams
+            Resource: "*"
+          - Effect: Allow
+            Action: dynamodb:*
+            Resource: "arn:aws:dynamodb:*:*:table/InResponse*"
+# Allow lambda to send Email
+      - PolicyName: InResponseSES
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - ses:SendEmail
+            - ses:SendRawEmail
+            Resource: "*"   
+# Allow lambda to run step function   
+      - PolicyName: InResponseStepFunctions
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - states:StartExecution
+            - states:DescribeStateMachine
+            - states:ListExecutions
+            Resource: "arn:aws:states:*:*:stateMachine:InResponse*"
+# Allow lambda access to "inresponse" parameters in ssm store
+      - PolicyName: InResponseParamStore
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - ssm:GetParameters
+            - ssm:GetParameter
+            Resource: !Sub "arn:aws:ssm:*:${AWS::AccountId}:parameter/inresponse/*"
+          - Effect: Allow
+            Action: ssm:DescribeParameters
+            Resource: "*"
+# Lambda Functions
+# Code will be udpated later using aws CLI
+# Adding a small placeholder code here
+# LambdaIncidentProcessor - Lambda function to process incoming API requests
+  LambdaIncidentProcessor:
+    Type: AWS::Lambda::Function
+    DependsOn: InResponseLambdaRole
+    Properties:
+      FunctionName: InResponseIncidentProcessor
+      Handler: processor/lambda_function.lambda_handler 
+      Role:
+        Fn::GetAtt:
+        - InResponseLambdaRole
+        - Arn
+      Code:
+        ZipFile: |
+                   def handler(event, context):
+                       print event
+      Runtime: python3.9
+# LambdaIncidentNotifier - Lambda function to send email alerts
+  LambdaIncidentNotifier:
+    Type: AWS::Lambda::Function
+    DependsOn: InResponseLambdaRole
+    Properties:
+      FunctionName: InResponseIncidentNotifier
+      Handler: notifier/lambda_function.lambda_handler 
+      Role:
+        Fn::GetAtt:
+        - InResponseLambdaRole
+        - Arn
+      Code:
+        ZipFile: |
+                   def handler(event, context):
+                       print event
+      Runtime: python3.9
+# SSM Parameter Store - SES From-Email
+  SesSenderEmail:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: "/inresponse/senderemail"
+      Type: String
+      Value: 
+        Ref: SenderEmail
+# IAM Role and Policy for state machine
+  StatesExecutionRole:
+    Type: "AWS::IAM::Role"
+    DependsOn:
+      - LambdaIncidentNotifier
+      - LambdaIncidentProcessor
+    Properties:
+      RoleName: InResponse-StepFunctionRole
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - !Sub states.${AWS::Region}.amazonaws.com
+            Action: "sts:AssumeRole"
+      Path: "/"
+      Policies:
+        - PolicyName: StatesExecutionPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "lambda:InvokeFunction"
+                Resource:
+                  - "arn:aws:lambda:*:*:function:InResponse*"
+                  - "arn:aws:lambda:*:*:function:InResponse*:*"
+        - PolicyName: CloudwatchLogging
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Action:
+              - logs:CreateLogGroup
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+              Resource: "*" 
+# State Machine - For notiication and escalation
+  InResponseStateMachine:
+    Type: AWS::StepFunctions::StateMachine
+    DependsOn: StatesExecutionRole
+    Properties: 
+      StateMachineName: InResponseEscalation
+      Definition: 
+        Comment: Escalation State Machine
+        StartAt: Parallel
+        States:
+          Parallel:
+            Type: Parallel
+            Branches:
+            - StartAt: oncall
+              States:
+                oncall:
+                  Type: Task
+                  Resource: arn:aws:states:::lambda:invoke
+                  OutputPath: "$.Payload"
+                  Parameters:
+                    FunctionName: !GetAtt 'LambdaIncidentNotifier.Arn'
+                    Payload:
+                      incident.$: "$"
+                      escalationType: oncall
+                  Retry:
+                  - ErrorEquals:
+                    - Lambda.ServiceException
+                    - Lambda.AWSLambdaException
+                    - Lambda.SdkClientException
+                    IntervalSeconds: 2
+                    MaxAttempts: 6
+                    BackoffRate: 2
+                  End: true
+            - StartAt: Wait 5 Minutes
+              States:
+                Wait 5 Minutes:
+                  Type: Wait
+                  Seconds: 300
+                  Next: escalation
+                escalation:
+                  Type: Task
+                  Resource: arn:aws:states:::lambda:invoke
+                  OutputPath: "$.Payload"
+                  Parameters:
+                    FunctionName: !GetAtt 'LambdaIncidentNotifier.Arn'
+                    Payload:
+                      incident.$: "$"
+                      escalationType: escalation
+                  Retry:
+                  - ErrorEquals:
+                    - Lambda.ServiceException
+                    - Lambda.AWSLambdaException
+                    - Lambda.SdkClientException
+                    IntervalSeconds: 2
+                    MaxAttempts: 6
+                    BackoffRate: 2
+                  End: true
+            End: true
+      RoleArn: 
+        Fn::GetAtt:
+        - StatesExecutionRole
+        - Arn
+  InResponseStateMachineArn:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: "/inresponse/statemachinearn"
+      Type: String
+      Value: !GetAtt 'InResponseStateMachine.Arn'
+# HTTP API With Lambda Integration
+  InResponseAPI:
+    Type: AWS::ApiGatewayV2::Api
+    DependsOn: InResponseStateMachine
+    Properties: 
+      Name: inresponse-http-api
+      ProtocolType: HTTP
+  APIInvokeLambdaPermission:
+    Type: AWS::Lambda::Permission
+    DependsOn:
+      - InResponseAPI
+      - LambdaIncidentNotifier
+      - LambdaIncidentProcessor
+    Properties:
+      FunctionName: "InResponseIncidentProcessor"
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${InResponseAPI}/*/*/*
+  APIIntegration:
+    Type : AWS::ApiGatewayV2::Integration
+    DependsOn: InResponseAPI
+    Properties:
+      ApiId: !Ref InResponseAPI
+      IntegrationType: AWS_PROXY
+      PayloadFormatVersion: "2.0"
+      IntegrationUri: !GetAtt 'LambdaIncidentProcessor.Arn'
+  GETRoute:
+    Type: AWS::ApiGatewayV2::Route
+    DependsOn: APIIntegration
+    Properties:
+      ApiId: !Ref InResponseAPI
+      RouteKey: "GET /{IncidentId}"
+      Target: !Join 
+        - /
+        - - integrations
+          - !Ref APIIntegration
+  POSTRoute:
+    Type: AWS::ApiGatewayV2::Route
+    DependsOn: APIIntegration
+    Properties:
+      ApiId: !Ref InResponseAPI
+      RouteKey: "POST /{IncidentId}"
+      Target: !Join 
+        - /
+        - - integrations
+          - !Ref APIIntegration
+  PUTRoute:
+    Type: AWS::ApiGatewayV2::Route
+    DependsOn: APIIntegration
+    Properties:
+      ApiId: !Ref InResponseAPI
+      RouteKey: "PUT /"
+      Target: !Join 
+        - /
+        - - integrations
+          - !Ref APIIntegration
+  APILogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties: 
+      LogGroupName: InResponseApiLogGroup
+      RetentionInDays: 7
+  DefaultStage:
+    Type: AWS::ApiGatewayV2::Stage
+    DependsOn: InResponseAPI
+    Properties:
+      ApiId: !Ref InResponseAPI
+      AutoDeploy: true
+      StageName: '$default'
+      AccessLogSettings:
+        DestinationArn: !GetAtt 'APILogGroup.Arn'
+        Format: '$context.identity.sourceIp - - [$context.requestTime] "$context.httpMethod $context.routeKey $context.protocol" $context.status $context.responseLength $context.requestId $context.integrationErrorMessage'
+  InResponseApiGwArn:
+    Type: AWS::SSM::Parameter
+    DependsOn: InResponseAPI
+    Properties:
+      Name: "/inresponse/apiendpoint"
+      Type: String
+      Value: !GetAtt 'InResponseAPI.ApiEndpoint'

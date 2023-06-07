@@ -7,6 +7,7 @@ This is the code repository for [Architecting Cloud-Native Serverless Solutions]
 **Design, build, and operate serverless solutions on cloud and open source platforms**
 
 ## What is this book about?
+
 Serverless computing has emerged as a mainstream paradigm in both cloud and on-premises computing, with AWS Lambda playing a pivotal role in shaping the Function-as-a-Service (FaaS) landscape. However, with the explosion of serverless technologies and vendors, it has become increasingly challenging to comprehend the foundational services and their offerings.
 Architecting Cloud Native Serverless Solutions lays a strong foundation for understanding the serverless landscape and technologies in a vendor-agnostic manner. You'll learn how to select the appropriate cloud vendors and technologies based on your specific needs. In addition, you'll dive deep into the serverless services across AWS, GCP, Azure, and Cloudflare followed by open source serverless tools such as Knative, OpenFaaS, and OpenWhisk, along with examples. You'll explore serverless solutions on Kubernetes that can be deployed on both cloud-hosted clusters and on-premises environments, with real-world use cases.
 
@@ -20,8 +21,18 @@ This book covers the following exciting features:
 
 If you feel this book is for you, get your [copy](https://www.amazon.com/Architecting-Cloud-Native-Serverless-Solutions-ebook/dp/B0BYNX4447) today!
 
-<a href="https://www.packtpub.com/?utm_source=github&utm_medium=banner&utm_campaign=GitHubBanner"><img src="https://raw.githubusercontent.com/PacktPublishing/GitHub/master/GitHub.png" alt="https://www.packtpub.com/" border="5" /></a>
+## About the Author
+### Safeer CM
 
-## Get to Know the Author
-** Safeer CM **
-    He is a technology generalist with more than 16 years of experience in site reliability engineering, DevOps, infrastructure, and platform engineering. A site reliability engineer by trade, Safeer has managed large-scale production infrastructures at internet giants like Yahoo and LinkedIn and is currently working at Flipkart. He has experience in cloud management and consulting for budding and established startups as a cloud architect. He is an ambassador of the Continuous Delivery Foundation and contributes to the CD and DevOps communities. As a technology speaker, blogger and meetup organizer, Safeer enjoys mentoring new technology talents, especially in the fields of SRE and DevOps.
+Safeer is a technology generalist with more than 16 years of experience in site reliability engineering, DevOps, infrastructure, and platform engineering. A site reliability engineer by trade, Safeer has managed large-scale production infrastructures at internet giants like Yahoo and LinkedIn and is currently working at Flipkart. He has experience in cloud management and consulting for budding and established startups as a cloud architect. He is an ambassador of the Continuous Delivery Foundation and contributes to the CD and DevOps communities. As a technology speaker, blogger and meetup organizer, Safeer enjoys mentoring new technology talents, especially in the fields of SRE and DevOps.
+
+# Instructions and Navigation
+
+This repo contains the code and instructions for all projects covered in the book.  They are organized by chapter and you can navigate to each chapter from the links below
+
+- [ Chapter 3 - Serverless solutions in AWS ](chapter-3)
+- [ Chapter 4 - Serverless solutions in Azure ](chapter-4)
+- [ Chapter 3 - Serverless solutions in GCP ](chapter-5)
+- [ Chapter 6 - Serverless solutions in Cloudflare ](chapter-6)
+- [ Chapter 7 - Serverless on Kubernetes- Knative and OpenFaaS ](chapter-7)
+- [ Chapter 8 - Self-hosted FaaS with Apache OpenWhisk ](chapter-8)

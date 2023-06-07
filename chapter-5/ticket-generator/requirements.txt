@@ -1,0 +1,4 @@
+functions-framework==3.3.0
+google-cloud-spanner
+google-cloud-storage
+reportlab

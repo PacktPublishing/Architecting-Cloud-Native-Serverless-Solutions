@@ -1,0 +1,30 @@
+{
+  "InResponseService": [
+    {
+      "PutRequest": {
+        "Item": {
+          "ServiceId": {
+            "S": "athena"
+          },
+          "TeamId": {
+            "S": "devops"
+          }
+        }
+      }
+    }
+  ],
+  "InResponseConfig": [
+    {
+      "PutRequest": {
+        "Item": {
+          "ConfigKey": {
+            "S": "IncidentId"
+          },
+          "CurrentId": {
+            "N": "1000"
+          }
+        }
+      }
+    }
+  ]
+}

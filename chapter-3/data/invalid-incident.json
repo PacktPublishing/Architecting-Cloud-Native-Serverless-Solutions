@@ -1,0 +1,7 @@
+{ "severity": "ERR",
+    "service": "athens",
+    "description": "5xx error rate above 5% in payment service",
+    "state": "open",
+    "source": "nagios",
+    "title": "5xx Error Spike"
+    }
